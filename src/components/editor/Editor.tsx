@@ -62,14 +62,13 @@ const insertMonacoCode = (editor: typeof schema.BlockNoteEditor) => ({
 // Notion styling overrides applied in index.css
 
 export default function Editor() {
-  const { activeDocumentId, documentContents, fetchContent } = useDocumentStore();
+  const { activeDocumentId, fetchContent } = useDocumentStore();
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (activeDocumentId) {
-      if (!documentContents[activeDocumentId]) {
-        setIsLoading(true);
-      }
+      // Always show a loading state when switching documents to ensure we grab the latest remote version
+      setIsLoading(true);
       fetchContent(activeDocumentId).finally(() => setIsLoading(false));
     }
   }, [activeDocumentId, fetchContent]);
@@ -85,12 +84,12 @@ export default function Editor() {
   if (isLoading) {
     return (
       <div className="flex-1 flex items-center justify-center text-notion-text-sub animate-pulse">
-        <p>Loading document...</p>
+        <p>Syncing...</p>
       </div>
     );
   }
 
-  return <EditorInstance key={activeDocumentId + '-' + (documentContents[activeDocumentId]?.updatedAt || '0')} activeDocumentId={activeDocumentId} />;
+  return <EditorInstance key={activeDocumentId} activeDocumentId={activeDocumentId} />;
 }
 
 function EditorInstance({ activeDocumentId }: { activeDocumentId: string }) {
