@@ -1,0 +1,60 @@
+version: '3.8'
+
+services:
+  database:
+    image: postgres:16-alpine
+    container_name: notion-db
+    environment:
+      POSTGRES_USER: notion_user
+      POSTGRES_PASSWORD: notion_password
+      POSTGRES_DB: notion_db
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U notion_user -d notion_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: notion-redis
+    ports:
+      - "6380:6379"
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: notion-backend
+    depends_on:
+      database:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    environment:
+      - PORT=8080
+      - DATABASE_URL=postgres://notion_user:notion_password@database:5432/notion_db?sslmode=disable
+      - REDIS_ADDR=redis:6379
+      - JWT_SECRET=kisah-super-secret-jwt-key-2024-notion-clone
+      - ADMIN_USERNAME=admin@kisah.com
+      - ADMIN_PASSWORD=Living99..
+    ports:
+      - "8081:8080"
+    restart: always
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: notion-frontend
+    depends_on:
+      - backend
+    ports:
+      - "80:80"
+    restart: always
+
+volumes:
+  postgres_data:

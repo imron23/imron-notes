@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Development Report: Notion Clone Revamp</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Inter', -apple-system, sans-serif; background: #f4f5f7; color: #1a1a2e; }
+        .container { max-width: 900px; margin: 40px auto; background: #ffffff; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.05); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%); color: white; padding: 50px 40px; text-align: center; }
+        .header h1 { font-size: 36px; font-weight: 800; letter-spacing: -1px; margin-bottom: 12px; }
+        .header p { font-size: 16px; opacity: 0.9; }
+        .section { padding: 40px; }
+        .section-title { font-size: 20px; font-weight: 700; color: #111827; margin-bottom: 24px; padding-bottom: 12px; border-bottom: 2px solid #f3f4f6; display: flex; align-items: center; gap: 8px; }
+        
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+        
+        .card { background: #fafafa; border: 1px solid #f0f0f0; border-radius: 12px; padding: 24px; transition: transform 0.2s; }
+        .card:hover { transform: translateY(-4px); box-shadow: 0 12px 24px rgba(0,0,0,0.06); }
+        .card h3 { font-size: 16px; font-weight: 600; color: #374151; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+        .card p { font-size: 14px; color: #6b7280; line-height: 1.6; }
+        
+        .bug-list { list-style: none; }
+        .bug-item { display: flex; gap: 16px; padding: 16px; background: white; border: 1px solid #fee2e2; border-left: 4px solid #ef4444; border-radius: 8px; margin-bottom: 12px; }
+        .bug-item.resolved { border-color: #d1fae5; border-left-color: #10b981; }
+        .bug-icon { font-size: 20px; }
+        .bug-content h4 { font-size: 15px; font-weight: 600; color: #111827; margin-bottom: 4px; }
+        .bug-content p { font-size: 13px; color: #4b5563; }
+        
+        .badge { display: inline-block; padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+        .badge-feature { background: #e0e7ff; color: #4338ca; }
+        .badge-ui { background: #fef3c7; color: #047857; }
+        
+        .timeline { position: relative; padding-left: 30px; margin-top: 20px; }
+        .timeline::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 2px; background: #e5e7eb; }
+        .timeline-item { position: relative; margin-bottom: 24px; }
+        .timeline-item::before { content: ''; position: absolute; left: -35px; top: 4px; width: 12px; height: 12px; border-radius: 50%; background: #8b5cf6; border: 2px solid white; box-shadow: 0 0 0 2px #e5e7eb; }
+        .timeline-date { font-size: 12px; font-weight: 600; color: #8b5cf6; text-transform: uppercase; margin-bottom: 6px; }
+        .timeline-title { font-size: 15px; font-weight: 600; color: #1f2937; margin-bottom: 4px; }
+        .timeline-desc { font-size: 14px; color: #6b7280; line-height: 1.5; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Notion Clone Refactor Report</h1>
+            <p>Executive Dashboard & Command Summary</p>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">📂 Command & Feature Summary</h2>
+            <div class="grid">
+                <div class="card">
+                    <h3><span class="badge badge-feature">Feature</span> Share & Public View</h3>
+                    <p>Pengguna meminta fitur URL Share Publik. Sistem membangun modul <strong>ShareModal</strong> dan <strong>PublicViewPage</strong>, dengan daftar tautan aktif di <strong>Settings</strong>.</p>
+                </div>
+                <div class="card">
+                    <h3><span class="badge badge-ui">UI Revamp</span> Dark Mode Global</h3>
+                    <p>Memperhalus mode gelap agar memengaruhi seluruh aplikasi, tidak hanya kanvas. Memodifikasi CSS global (Background #1f2937) agar popup, input, dan sidebar selaras.</p>
+                </div>
+                <div class="card">
+                    <h3><span class="badge badge-feature">Feature</span> Auto-Backup & Persist</h3>
+                    <p>Kebutuhan auto-save sehingga ketikan tidak hilang saat <i>restart</i> docker/browser. Modul <i>Zustand Persist Middleware</i> berhasil diintegrasi.</p>
+                </div>
+                <div class="card">
+                    <h3><span class="badge badge-ui">UI Revamp</span> VS Code Styled Blocks</h3>
+                    <p>Mengubah tampilan blok kode bawaaan agar tampil seidentik gaya Github/VS code. Ditambah pembaruan visual panel Stabillo/Color Picker.</p>
+                </div>
+                <div class="card">
+                    <h3><span class="badge badge-feature">Feature</span> Search Sorting</h3>
+                    <p>Mencari kata di <i>seluruh</i> isi note dengan cermat, bukan sekadar di judul. Juga diurutkan menurut tanggal <i>(descending)</i>.</p>
+                </div>
+                <div class="card">
+                    <h3><span class="badge badge-feature">Feature</span> PDF Auto-Download</h3>
+                    <p>Penggantian dari `window.print` ke `html2pdf.js`. Hanya meng-ekspor *current view/wrapper* secara langsung tanpa intervensi dialog browser.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section" style="background: #fafafa;">
+            <h2 class="section-title">🐛 Bug Encountered & Resolved</h2>
+            <ul class="bug-list">
+                <li class="bug-item resolved">
+                    <div class="bug-icon">🐞</div>
+                    <div class="bug-content">
+                        <h4>Pop-up Slash Menu (/) Terpotong (Scroll Bug)</h4>
+                        <p><strong>Penyebab:</strong> Elemen `<main>` memiliki properti `overflow: hidden`, sehingga saat Floating-UI milik BlockNote (bertipe <i>portal</i>) ditarik ke bawah layar, posisinya tergunting batasan layouting CSS.<br>
+                        <strong>Solusi:</strong> Membuang `overflow: hidden` dari wrapper dokument dan mengandalkan Window Scrolling alami HTML5.</p>
+                    </div>
+                </li>
+                <li class="bug-item resolved">
+                    <div class="bug-icon">🐞</div>
+                    <div class="bug-content">
+                        <h4>Dark Mode Teks Hitam di Latar Hitam</h4>
+                        <p><strong>Penyebab:</strong> Node Editor dari dependensi `@blocknote/mantine` di *hard-code* pada mode `light`, mengabaikan tema gelap UI di sekitarnya.<br>
+                        <strong>Solusi:</strong> Menyambungkan prop `theme` editor ke dalam Global Store `isDarkMode` secara langsung.</p>
+                    </div>
+                </li>
+                <li class="bug-item resolved">
+                    <div class="bug-icon">🐞</div>
+                    <div class="bug-content">
+                        <h4>Public Share Page Hanya Muncul Judul Tanpa Isi</h4>
+                        <p><strong>Penyebab:</strong> Fungsi perender memanggil key array `doc.blocks` yang bernilai *null*, karena data tersebut sebetulnya disimpan di key `doc.content`.<br>
+                        <strong>Solusi:</strong> Modifikasi pemanggil `renderBlocks((doc).content)`.</p>
+                    </div>
+                </li>
+                <li class="bug-item resolved">
+                    <div class="bug-icon">🐞</div>
+                    <div class="bug-content">
+                        <h4>Search Modal tidak dapat menemukan kata dalam kontent</h4>
+                        <p><strong>Penyebab:</strong> Sama seperti fungsi perender, loop teks di SearchModal memedah `doc.blocks` bukan `doc.content`.<br>
+                        <strong>Solusi:</strong> Stringify konten aktual dan menambahkan filter <i>sort</i> berdasar kapabilitas parameter createdAt.</p>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
