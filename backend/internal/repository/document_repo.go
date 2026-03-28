@@ -93,15 +93,27 @@ func buildTree(items []models.SidebarItem, parentID *string) []models.SidebarIte
 	return result
 }
 
-// Create makes a new document
-func (r *DocumentRepository) Create(ctx context.Context, title string, parentID *string) (*models.Document, error) {
-	query := `
-		INSERT INTO documents (title, parent_id) 
-		VALUES ($1, $2)
-		RETURNING id, parent_id, title, icon, cover_image, content, is_archived, created_at, updated_at
-	`
+// Create makes a new document. If id is provided, it uses it, otherwise it uses gen_random_uuid() backing.
+func (r *DocumentRepository) Create(ctx context.Context, id *string, title string, parentID *string) (*models.Document, error) {
+	var query string
+	var row pgx.Row
 	
-	row := r.database.Pg.QueryRow(ctx, query, title, parentID)
+	if id != nil {
+		query = `
+			INSERT INTO documents (id, title, parent_id) 
+			VALUES ($1, $2, $3)
+			RETURNING id, parent_id, title, icon, cover_image, content, is_archived, created_at, updated_at
+		`
+		row = r.database.Pg.QueryRow(ctx, query, *id, title, parentID)
+	} else {
+		query = `
+			INSERT INTO documents (title, parent_id) 
+			VALUES ($1, $2)
+			RETURNING id, parent_id, title, icon, cover_image, content, is_archived, created_at, updated_at
+		`
+		row = r.database.Pg.QueryRow(ctx, query, title, parentID)
+	}
+	
 	var d models.Document
 	err := row.Scan(&d.ID, &d.ParentID, &d.Title, &d.Icon, &d.CoverImage, &d.Content, &d.IsArchived, &d.CreatedAt, &d.UpdatedAt)
 	if err != nil {

@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import type { DocumentMeta, Document } from '../types';
+import { api } from '../api';
 
 interface DocumentStore {
   documents: DocumentMeta[];
@@ -8,6 +9,11 @@ interface DocumentStore {
   activeDocumentId: string | null;
   setActiveDocument: (id: string | null) => void;
   
+  // API Fetch
+  fetchTree: () => Promise<void>;
+  fetchArchived: () => Promise<void>;
+  fetchContent: (id: string) => Promise<void>;
+
   // Basic CRUD for tree
   addDocument: (parentId: string | null) => string;
   renameDocument: (id: string, title: string) => void;
@@ -29,167 +35,6 @@ interface DocumentStore {
   pageHistory: Record<string, Array<{ timestamp: string; content: any }>>;
   addHistorySnapshot: (id: string, content: any) => void;
 }
-
-// ... tauhidContent ...
-const tauhidContent = [
-  {
-    id: "h2-1",
-    type: "heading",
-    props: { level: 2 },
-    content: [{ type: "text", text: "📋 Detail Kajian Hari Senin: Tauhid (Mengenal Allah)", styles: {} }]
-  },
-  {
-    id: "b1-1",
-    type: "bulletListItem",
-    content: [
-      { type: "text", text: "Tema Utama: ", styles: { bold: true } },
-      { type: "text", text: "Allah Sang Maha Pencipta dan Pemberi Rezeki.", styles: {} }
-    ]
-  },
-  {
-    id: "b1-2",
-    type: "bulletListItem",
-    content: [
-      { type: "text", text: "Durasi: ", styles: { bold: true } },
-      { type: "text", text: "40 - 60 Menit (Sebelum Maghrib).", styles: {} }
-    ]
-  },
-  {
-    id: "b1-3",
-    type: "bulletListItem",
-    content: [
-      { type: "text", text: "Target Capaian: ", styles: { bold: true } },
-      { type: "text", text: "Anak mampu menjawab siapa Tuhannya dan mengenali Allah melalui ciptaan-Nya yang terlihat.", styles: {} }
-    ]
-  },
-  {
-    id: "div-1",
-    type: "paragraph",
-    content: []
-  },
-  {
-    id: "h2-2",
-    type: "heading",
-    props: { level: 2 },
-    content: [{ type: "text", text: "🕒 Struktur Kegiatan", styles: {} }]
-  },
-  {
-    id: "h3-1",
-    type: "heading",
-    props: { level: 3 },
-    content: [{ type: "text", text: "1. Pembukaan (5 Menit)", styles: {} }]
-  },
-  {
-    id: "b2-1",
-    type: "bulletListItem",
-    content: [{ type: "text", text: "Mulai dengan salam yang hangat dan pelukan.", styles: {} }]
-  },
-  {
-    id: "b2-2",
-    type: "bulletListItem",
-    content: [
-      { type: "text", text: "Pancingan: ", styles: { bold: true } },
-      { type: "text", text: "Tanyakan hal-hal menyenangkan yang mereka alami hari ini. \"Tadi siang lihat matahari tidak? Warnanya apa?\"", styles: {} }
-    ]
-  },
-  {
-    id: "b2-3",
-    type: "bulletListItem",
-    content: [
-      { type: "text", text: "Sampaikan tujuan: ", styles: { bold: true } },
-      { type: "text", text: "\"Hari ini kita mau jadi 'detektif' untuk mencari tahu siapa yang membuat dunia ini.\"", styles: {} }
-    ]
-  },
-  {
-    id: "h3-2",
-    type: "heading",
-    props: { level: 3 },
-    content: [{ type: "text", text: "2. Materi Inti: Metode Tanya Jawab (15 Menit)", styles: {} }]
-  },
-  {
-    id: "p-2",
-    type: "paragraph",
-    content: [
-      { type: "text", text: "Gunakan pola dari dokumen ", styles: {} },
-      { type: "text", text: "Yuk Belajar Tauhid", styles: { italic: true } },
-      { type: "text", text: " yang disederhanakan:", styles: {} }
-    ]
-  },
-  {
-    id: "b3-1",
-    type: "bulletListItem",
-    content: [
-      { type: "text", text: "Tanya: ", styles: { bold: true } },
-      { type: "text", text: "\"Siapa Tuhanmu?\"", styles: {} }
-    ],
-    children: [
-      {
-        id: "b3-1-nested",
-        type: "bulletListItem",
-        content: [
-          { type: "text", text: "Jawab: ", styles: { italic: true } },
-          { type: "text", text: "\"Tuhanku adalah Allah.\"", styles: {} }
-        ]
-      }
-    ]
-  },
-  {
-    id: "b3-2",
-    type: "bulletListItem",
-    content: [
-      { type: "text", text: "Tanya: ", styles: { bold: true } },
-      { type: "text", text: "\"Bagaimana cara kita mengenal Allah, padahal kita tidak bisa melihat-Nya sekarang?\"", styles: {} }
-    ],
-    children: [
-      {
-        id: "b3-2-nested",
-        type: "bulletListItem",
-        content: [
-          { type: "text", text: "Penjelasan: ", styles: { italic: true } },
-          { type: "text", text: "Jelaskan bahwa kita mengenal Allah melalui ", styles: {} },
-          { type: "text", text: "Ayat-Nya", styles: { bold: true } },
-          { type: "text", text: " (Tanda-tanda) dan Makhluk-Nya.", styles: {} }
-        ]
-      }
-    ]
-  }
-];
-
-const DUMMY_DOCUMENTS: DocumentMeta[] = [
-  {
-    id: '1',
-    title: 'Senin - Tauhid Mengenal Allah',
-    icon: '',
-    parentId: null,
-    children: []
-  },
-  {
-    id: '2',
-    title: 'Getting Started',
-    icon: '🚀',
-    parentId: null,
-    children: []
-  }
-];
-
-const DUMMY_CONTENTS: Record<string, Document> = {
-  '1': {
-    id: '1',
-    title: 'Senin - Tauhid Mengenal Allah',
-    icon: '',
-    content: tauhidContent,
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  },
-  '2': {
-    id: '2',
-    title: 'Getting Started',
-    icon: '🚀',
-    content: null,
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  }
-};
 
 const updateTreeItem = (
   items: DocumentMeta[], 
@@ -243,19 +88,76 @@ const addTreeItem = (
   });
 };
 
+// Ensure stable offline UX while allowing backend sync
 export const useDocumentStore = create<DocumentStore>()(
-  persist((set) => ({
-  documents: DUMMY_DOCUMENTS,
+  persist((set, get) => ({
+  documents: [],
   archivedDocuments: [],
-  activeDocumentId: '1',
-  documentContents: DUMMY_CONTENTS,
+  activeDocumentId: null,
+  documentContents: {},
   pageHistory: {},
   
+  fetchTree: async () => {
+    try {
+      const tree = await api.get('/documents/tree');
+      const local = get().documents;
+      
+      // Temporary Migration Logic: if DB is empty but we have local notes, push them!
+      if ((!tree || tree.length === 0) && local.length > 0 && local[0].id) {
+        console.log("Migrating local documents to backend...");
+        const traverseAndUpload = async (docs: typeof local) => {
+          for (const d of docs) {
+            await api.post('/documents/', { id: d.id, title: d.title, parent_id: d.parentId }).catch(() => {});
+            if (d.icon) await api.patch(`/documents/${d.id}`, { icon: d.icon }).catch(() => {});
+            if (d.coverImage) await api.patch(`/documents/${d.id}`, { cover_image: d.coverImage }).catch(() => {});
+            
+            const content = get().documentContents[d.id];
+            if (content?.content) {
+               await api.patch(`/documents/${d.id}`, { content: content.content }).catch(() => {});
+            }
+            if (d.children && d.children.length > 0) await traverseAndUpload(d.children);
+          }
+        };
+        await traverseAndUpload(local);
+        
+        const newTree = await api.get('/documents/tree');
+        set({ documents: newTree || [] });
+      } else {
+        set({ documents: tree || [] });
+      }
+    } catch (e) {
+      console.error('Failed to fetch tree API', e);
+    }
+  },
+
+  fetchArchived: async () => {
+    try {
+      const arch = await api.get('/documents/archived');
+      set({ archivedDocuments: arch || [] });
+    } catch (e) {
+      console.error('Failed to fetch archived API', e);
+    }
+  },
+
+  fetchContent: async (id) => {
+    try {
+      if (!id) return;
+      const d = await api.get(`/documents/${id}`);
+      if (d) {
+        set((state) => ({
+          documentContents: { ...state.documentContents, [id]: d }
+        }));
+      }
+    } catch (e) {
+      console.error('Failed to fetch content API', e);
+    }
+  },
+
   setActiveDocument: (id) => set({ activeDocumentId: id }),
   
   addDocument: (parentId) => {
     const defaultTitle = 'Untitled';
-    const newId = Date.now().toString();
+    const newId = crypto.randomUUID();
     const newItem: DocumentMeta = {
       id: newId,
       title: defaultTitle,
@@ -270,12 +172,16 @@ export const useDocumentStore = create<DocumentStore>()(
       updatedAt: new Date().toISOString(),
     };
     
+    // OPTIMISTIC UPDATE
     set((state) => ({
       documents: addTreeItem(state.documents, parentId, newItem),
       documentContents: { ...state.documentContents, [newId]: newContent },
       activeDocumentId: newId,
     }));
     
+    // BACKEND SYNC
+    api.post('/documents/', { id: newId, title: defaultTitle, parent_id: parentId }).catch(console.error);
+
     return newId;
   },
   
@@ -287,6 +193,8 @@ export const useDocumentStore = create<DocumentStore>()(
         [id]: { ...state.documentContents[id], title }
       }
     }));
+    // BACKEND SYNC
+    api.patch(`/documents/${id}`, { title }).catch(console.error);
   },
   
   updateIcon: (id, icon) => {
@@ -297,6 +205,7 @@ export const useDocumentStore = create<DocumentStore>()(
         [id]: { ...state.documentContents[id], icon }
       }
     }));
+    api.patch(`/documents/${id}`, { icon }).catch(console.error);
   },
   
   updateCover: (id, coverUrl) => {
@@ -307,6 +216,7 @@ export const useDocumentStore = create<DocumentStore>()(
         [id]: { ...state.documentContents[id], coverImage: coverUrl }
       }
     }));
+    api.patch(`/documents/${id}`, { cover_image: coverUrl }).catch(console.error);
   },
 
   updateShareStatus: (id, isShared) => {
@@ -325,6 +235,7 @@ export const useDocumentStore = create<DocumentStore>()(
       }
       return { documents: newDocs, archivedDocuments: newArchived, activeDocumentId: newActiveId };
     });
+    api.delete(`/documents/${id}`).catch(console.error);
   },
   
   moveDocument: (id, newParentId) => {
@@ -334,22 +245,27 @@ export const useDocumentStore = create<DocumentStore>()(
       let newDocs = findAndRemoveTreeItem(state.documents, id, removedContainer);
       
       const itemToMove = removedContainer.item;
-      if (!itemToMove) return state; // Document not found
+      if (!itemToMove) return state;
 
-      // Prevent cyclic moves (moving a folder inside its own subfolder)
       const checkCycle = (meta: DocumentMeta, targetId: string): boolean => {
          if (meta.id === targetId) return true;
          if (meta.children) return meta.children.some(c => checkCycle(c, targetId));
          return false;
       };
       if (newParentId && checkCycle(itemToMove, newParentId)) {
-         return state; // Reject move
+         return state;
       }
 
       itemToMove.parentId = newParentId;
       newDocs = addTreeItem(newDocs, newParentId, itemToMove);
       return { documents: newDocs };
     });
+    
+    // BACKEND SYNC (null parent_id is sent as explicit null thanks to our api struct allowing it maybe)
+    // We send double pointer `parent_id` wrapper or rely on omitted field vs null.
+    // In our Go backend, `ParentID **string` distinguishes omitted vs null. 
+    // Sending null actually overwrites it to null.
+    api.patch(`/documents/${id}`, { parent_id: newParentId }).catch(console.error);
   },
 
   restoreDocument: (id) => {
@@ -358,8 +274,6 @@ export const useDocumentStore = create<DocumentStore>()(
       if (!itemToRestore) return state;
       
       const newArchived = state.archivedDocuments.filter(d => d.id !== id);
-      
-      // We push it to root level when restoring to avoid missing parent logic complexities
       itemToRestore.parentId = null;
       
       return { 
@@ -368,16 +282,23 @@ export const useDocumentStore = create<DocumentStore>()(
         activeDocumentId: id
       };
     });
+    api.post(`/documents/${id}/restore`).catch(console.error);
   },
 
   permanentlyDelete: (id) => {
     set((state) => ({
       archivedDocuments: state.archivedDocuments.filter(d => d.id !== id)
     }));
+    api.delete(`/documents/${id}/permanent`).catch(console.error);
   },
 
   emptyTrash: () => {
+    const trash = get().archivedDocuments;
     set({ archivedDocuments: [] });
+    // Execute permanent delete for all
+    trash.forEach(d => {
+      api.delete(`/documents/${d.id}/permanent`).catch(console.error);
+    });
   },
   
   updateContent: (id, content) => {
@@ -387,12 +308,14 @@ export const useDocumentStore = create<DocumentStore>()(
         [id]: { ...state.documentContents[id], content, updatedAt: new Date().toISOString() }
       }
     }));
+    
+    // We only send content update
+    api.patch(`/documents/${id}`, { content }).catch(console.error);
   },
 
   addHistorySnapshot: (id, content) => {
     set((state) => {
       const existing = state.pageHistory[id] || [];
-      // Keep up to 30 snapshots per doc
       const updated = [{ timestamp: new Date().toISOString(), content }, ...existing].slice(0, 30);
       return { pageHistory: { ...state.pageHistory, [id]: updated } };
     });

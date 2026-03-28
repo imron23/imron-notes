@@ -61,6 +61,7 @@ func (h *DocumentHandler) GetTree(w http.ResponseWriter, r *http.Request) {
 
 func (h *DocumentHandler) Create(w http.ResponseWriter, r *http.Request) {
 	var payload struct {
+		ID       *string `json:"id"`
 		Title    string  `json:"title"`
 		ParentID *string `json:"parent_id"`
 	}
@@ -73,7 +74,7 @@ func (h *DocumentHandler) Create(w http.ResponseWriter, r *http.Request) {
 	ctx, cancel := context.WithTimeout(r.Context(), 5*time.Second)
 	defer cancel()
 
-	doc, err := h.repo.Create(ctx, payload.Title, payload.ParentID)
+	doc, err := h.repo.Create(ctx, payload.ID, payload.Title, payload.ParentID)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -159,7 +160,7 @@ func (h *DocumentHandler) ImportFromURL(w http.ResponseWriter, r *http.Request) 
 	ctx, cancel := context.WithTimeout(r.Context(), 10*time.Second)
 	defer cancel()
 
-	doc, err := h.repo.Create(ctx, title, payload.ParentID)
+	doc, err := h.repo.Create(ctx, nil, title, payload.ParentID)
 	if err != nil {
 		http.Error(w, "Failed to create document: "+err.Error(), http.StatusInternalServerError)
 		return

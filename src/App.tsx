@@ -75,6 +75,13 @@ function App() {
     document.body.style.color = isDarkMode ? '#e5e7eb' : '#1a1a2e';
   }, [isDarkMode]);
 
+  useEffect(() => {
+    if (isAuthenticated) {
+      useDocumentStore.getState().fetchTree();
+      useDocumentStore.getState().fetchArchived();
+    }
+  }, [isAuthenticated]);
+
   if (!isAuthenticated) {
     return <LoginPage />;
   }

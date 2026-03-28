@@ -2,7 +2,7 @@ import { BlockNoteView } from "@blocknote/mantine";
 import { getDefaultReactSlashMenuItems, SuggestionMenuController, useCreateBlockNote } from "@blocknote/react";
 import { BlockNoteSchema, defaultBlockSpecs, insertOrUpdateBlockForSlashMenu } from "@blocknote/core";
 import "@blocknote/mantine/style.css";
-import { useRef } from "react";
+import { useRef, useEffect, useState } from "react";
 import { useDocumentStore } from '../../store/useDocumentStore';
 import { useUIStore } from '../../store/useUIStore';
 import { PageLinkBlock } from "./blocks/PageLinkBlock";
@@ -62,7 +62,18 @@ const insertMonacoCode = (editor: typeof schema.BlockNoteEditor) => ({
 // Notion styling overrides applied in index.css
 
 export default function Editor() {
-  const { activeDocumentId } = useDocumentStore();
+  const { activeDocumentId, documentContents, fetchContent } = useDocumentStore();
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    if (activeDocumentId) {
+      if (!documentContents[activeDocumentId]) {
+        setIsLoading(true);
+      }
+      fetchContent(activeDocumentId).finally(() => setIsLoading(false));
+    }
+  }, [activeDocumentId, fetchContent]);
+
   if (!activeDocumentId) {
     return (
       <div className="flex-1 flex items-center justify-center text-notion-text-sub">
@@ -70,7 +81,16 @@ export default function Editor() {
       </div>
     );
   }
-  return <EditorInstance key={activeDocumentId} activeDocumentId={activeDocumentId} />;
+
+  if (isLoading) {
+    return (
+      <div className="flex-1 flex items-center justify-center text-notion-text-sub animate-pulse">
+        <p>Loading document...</p>
+      </div>
+    );
+  }
+
+  return <EditorInstance key={activeDocumentId + '-' + (documentContents[activeDocumentId]?.updatedAt || '0')} activeDocumentId={activeDocumentId} />;
 }
 
 function EditorInstance({ activeDocumentId }: { activeDocumentId: string }) {
