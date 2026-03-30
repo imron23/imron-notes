@@ -406,12 +406,31 @@ function NotionFormattingToolbar() {
   }, [editor]);
 
   // ─── Comment ─────────────────────────────────────────────────────────────
+  const openComment = useCallback(() => {
+    try {
+      const sel = editor._tiptapEditor.state.selection;
+      savedSel.current = { from: sel.from, to: sel.to };
+    } catch { savedSel.current = null; }
+    togglePop("comment");
+  }, [editor, togglePop]);
+
   const submitComment = useCallback((text: string) => {
-    if (!text.trim()) return;
-    // Insert comment as a callout-style annotation in the text
-    // (Full collaborative comments would need a backend; this inserts inline)
+    try {
+      if (savedSel.current) {
+        editor._tiptapEditor.commands.setTextSelection(savedSel.current);
+      }
+    } catch { /* ignore */ }
     editor.focus();
-    console.info("[Comment]", text);
+
+    if (text.trim()) {
+      // Create a pseudo-link to represent the comment in the document
+      const commentId = Math.random().toString(36).substring(2, 9);
+      const safeText = encodeURIComponent(text.substring(0, 100)); 
+      setTimeout(() => { editor.createLink(`#comment_${commentId}_${safeText}`); }, 10);
+    }
+    
+    savedSel.current = null;
+    setPop(null);
   }, [editor]);
 
   // ─── Derived: which align icon to show ───────────────────────────────────
@@ -466,7 +485,7 @@ function NotionFormattingToolbar() {
 
         {/* ── Comment ── */}
         <div className="notion-tb-color-wrap">
-          <TBtn label="Comment" onClick={() => togglePop("comment")}><MessageSquare size={16} /></TBtn>
+          <TBtn label="Comment" onClick={openComment}><MessageSquare size={16} /></TBtn>
           {pop === "comment" && (
             <CommentPopover onSubmit={submitComment} onClose={closePop} />
           )}
