@@ -801,7 +801,140 @@ html.dark .notion-link-input { color: rgba(255,255,255,0.82); border-color: rgba
   white-space: nowrap;
 }
 .notion-link-btn:hover { background: #1c6cc0; }
+.notion-link-btn-remove {
+  padding: 5px 8px;
+  border: none;
+  border-radius: 6px;
+  background: rgba(55,53,47,0.06);
+  color: rgba(55,53,47,0.5);
+  font-size: 12px;
+  cursor: pointer;
+  transition: background 0.1s;
+  white-space: nowrap;
+}
+.notion-link-btn-remove:hover { background: rgba(235,87,87,0.1); color: #e03e3e; }
 
+/* ─── Emoji Picker ─── */
+.notion-emoji-picker {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  z-index: 200;
+  background: #fff;
+  border: 1px solid rgba(55,53,47,0.09);
+  border-radius: 10px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.06);
+  padding: 10px 12px;
+  animation: tbFadeIn 0.1s ease both;
+}
+html.dark .notion-emoji-picker {
+  background: #2f2f2f;
+  border-color: rgba(255,255,255,0.1);
+}
+.notion-emoji-grid {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  gap: 2px;
+}
+.notion-emoji-btn {
+  border: none;
+  background: transparent;
+  font-size: 18px;
+  line-height: 1;
+  padding: 4px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.08s;
+}
+.notion-emoji-btn:hover { background: rgba(55,53,47,0.08); }
+html.dark .notion-emoji-btn:hover { background: rgba(255,255,255,0.08); }
+
+/* ─── Align Menu (inline popover) ─── */
+.notion-align-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  z-index: 200;
+  background: #fff;
+  border: 1px solid rgba(55,53,47,0.09);
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+  padding: 4px;
+  display: flex;
+  gap: 2px;
+  animation: tbFadeIn 0.1s ease both;
+}
+html.dark .notion-align-menu {
+  background: #2f2f2f;
+  border-color: rgba(255,255,255,0.1);
+}
+.notion-align-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border: none;
+  border-radius: 5px;
+  background: transparent;
+  cursor: pointer;
+  color: rgba(55,53,47,0.6);
+  transition: background 0.08s, color 0.08s;
+}
+.notion-align-btn:hover { background: rgba(55,53,47,0.08); color: #37352f; }
+.notion-align-btn--active { background: rgba(35,131,226,0.12) !important; color: #2383e2 !important; }
+html.dark .notion-align-btn { color: rgba(255,255,255,0.5); }
+html.dark .notion-align-btn:hover { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.85); }
+html.dark .notion-align-btn--active { background: rgba(35,131,226,0.2) !important; color: #4496e8 !important; }
+
+/* ─── Comment Popover ─── */
+.notion-comment-popover {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  z-index: 200;
+  background: #fff;
+  border: 1px solid rgba(55,53,47,0.12);
+  border-radius: 10px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.06);
+  padding: 10px;
+  min-width: 280px;
+  animation: tbFadeIn 0.1s ease both;
+}
+html.dark .notion-comment-popover {
+  background: #2f2f2f;
+  border-color: rgba(255,255,255,0.1);
+}
+.notion-comment-input {
+  width: 100%;
+  border: 1px solid rgba(55,53,47,0.15);
+  border-radius: 6px;
+  padding: 8px 10px;
+  font-size: 13px;
+  line-height: 1.5;
+  outline: none;
+  resize: none;
+  background: transparent;
+  color: #37352f;
+  font-family: inherit;
+  box-sizing: border-box;
+}
+.notion-comment-input:focus {
+  border-color: #2383e2;
+  box-shadow: 0 0 0 2px rgba(35,131,226,0.15);
+}
+html.dark .notion-comment-input { color: rgba(255,255,255,0.82); border-color: rgba(255,255,255,0.15); }
+.notion-comment-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 8px;
+}
+.notion-comment-hint {
+  font-size: 11px;
+  color: rgba(55,53,47,0.4);
+}
+html.dark .notion-comment-hint { color: rgba(255,255,255,0.3); }
 
 /* ═══════════════════════════════════════════════════════════════════════════
    ─── AI Skills Menu ────────────────────────────────────────────────────────
