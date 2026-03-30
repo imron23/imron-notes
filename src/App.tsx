@@ -75,11 +75,35 @@ function App() {
     document.body.style.color = isDarkMode ? '#e5e7eb' : '#1a1a2e';
   }, [isDarkMode]);
 
+  // Deep sync mechanism (Window focus + Polling)
   useEffect(() => {
-    if (isAuthenticated) {
-      useDocumentStore.getState().fetchTree();
-      useDocumentStore.getState().fetchArchived();
-    }
+    if (!isAuthenticated) return;
+    
+    const onFocus = async () => {
+      const store = useDocumentStore.getState();
+      await store.fetchTree();
+      await store.fetchArchived();
+      if (store.activeDocumentId) {
+        await store.fetchContent(store.activeDocumentId);
+      }
+    };
+    
+    // Initial fetch
+    onFocus();
+    
+    // Hook on window focus and visibility
+    window.addEventListener('focus', onFocus);
+    const handleVis = () => { if (document.visibilityState === 'visible') onFocus(); };
+    document.addEventListener('visibilitychange', handleVis);
+    
+    // Background polling interval (every 10 seconds)
+    const intervalId = setInterval(onFocus, 10000);
+    
+    return () => {
+      window.removeEventListener('focus', onFocus);
+      document.removeEventListener('visibilitychange', handleVis);
+      clearInterval(intervalId);
+    };
   }, [isAuthenticated]);
 
   if (!isAuthenticated) {
