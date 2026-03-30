@@ -209,11 +209,11 @@ html.dark ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); }
 }
 
 .page-title-input {
-  font-size: 40px !important;
+  font-size: 36px !important;
   font-weight: 700 !important;
-  line-height: 1.15 !important;
+  line-height: 1.2 !important;
   color: #111827 !important;
-  letter-spacing: -0.02em !important;
+  letter-spacing: -0.015em !important;
   border: none !important;
   outline: none !important;
   background: transparent !important;
@@ -599,17 +599,17 @@ html.dark .notion-toolbar {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 5px 6px;
+  padding: 6px 8px;
   border: none;
-  border-radius: 5px;
+  border-radius: 6px;
   background: transparent;
   cursor: pointer;
   color: rgba(55, 53, 47, 0.65);
-  font-size: 13px;
+  font-size: 14px;
   transition: background 0.08s ease, color 0.08s ease;
   flex-shrink: 0;
-  min-width: 28px;
-  height: 28px;
+  min-width: 30px;
+  height: 30px;
 }
 .notion-tb-btn:hover {
   background: rgba(55, 53, 47, 0.08);
@@ -665,8 +665,8 @@ html.dark .notion-tb-sep {
 
 /* ─── AI button ─── */
 .notion-tb-ai-btn {
-  padding: 4px 8px !important;
-  gap: 0;
+  padding: 6px 10px !important;
+  gap: 2px;
   min-width: unset;
   background: linear-gradient(135deg, rgba(99,102,241,0.08), rgba(139,92,246,0.08)) !important;
   color: #6366f1 !important;
@@ -702,9 +702,9 @@ html.dark .notion-tb-ai-btn:hover {
   border: 1px solid rgba(55,53,47,0.09);
   border-radius: 10px;
   box-shadow: 0 8px 32px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.06);
-  padding: 10px;
+  padding: 12px;
   animation: tbFadeIn 0.1s ease both;
-  width: 192px;
+  width: auto;
 }
 html.dark .notion-color-picker {
   background: #2f2f2f;
@@ -725,12 +725,12 @@ html.dark .notion-cp-label { color: rgba(255,255,255,0.4); }
 
 .notion-cp-grid {
   display: grid;
-  grid-template-columns: repeat(10, 1fr);
-  gap: 4px;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
 }
 .notion-cp-dot {
-  width: 16px;
-  height: 16px;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
   cursor: pointer;
   transition: transform 0.12s ease, box-shadow 0.12s ease;
