@@ -6,6 +6,7 @@ import (
 	"log"
 
 	"notion-backend/internal/config"
+	"notion-backend/migrations"
 
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/redis/go-redis/v9"
@@ -35,6 +36,13 @@ func InitDB(cfg *config.Config) (*Database, error) {
 		return nil, fmt.Errorf("database ping failed: %w", err)
 	}
 	log.Println("Connected to PostgreSQL")
+
+	// Auto-migrate
+	log.Println("Running database migrations...")
+	if _, err := pgPool.Exec(ctx, migrations.InitialSchema); err != nil {
+		return nil, fmt.Errorf("failed to run migrations: %w", err)
+	}
+	log.Println("Database migrations complete")
 
 	// Initialize Redis
 	rdb := redis.NewClient(&redis.Options{
