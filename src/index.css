@@ -655,12 +655,19 @@ html.dark .notion-tb-sep {
   align-items: center;
   gap: 1px;
 }
+.notion-tb-color-A {
+  font-size: 15px;
+  font-weight: 700;
+  font-family: Georgia, 'Times New Roman', serif;
+  line-height: 1;
+  color: inherit;
+  display: block;
+}
 .notion-tb-color-bar {
   width: 14px;
   height: 3px;
   border-radius: 99px;
   display: block;
-  margin-top: 1px;
 }
 
 /* ─── AI button ─── */
@@ -746,12 +753,55 @@ html.dark .notion-cp-dot--active {
   box-shadow: 0 0 0 2px #2f2f2f, 0 0 0 3.5px #4496e8 !important;
 }
 
-.notion-cp-divider {
-  height: 1px;
-  background: rgba(55,53,47,0.09);
-  margin: 8px 0;
+/* ─── Link popover ─── */
+.notion-link-popover {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  z-index: 200;
+  background: #fff;
+  border: 1px solid rgba(55,53,47,0.12);
+  border-radius: 10px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.06);
+  padding: 8px;
+  display: flex;
+  gap: 6px;
+  min-width: 280px;
+  animation: tbFadeIn 0.1s ease both;
 }
-html.dark .notion-cp-divider { background: rgba(255,255,255,0.1); }
+html.dark .notion-link-popover {
+  background: #2f2f2f;
+  border-color: rgba(255,255,255,0.1);
+}
+.notion-link-input {
+  flex: 1;
+  border: 1px solid rgba(55,53,47,0.15);
+  border-radius: 6px;
+  padding: 5px 10px;
+  font-size: 13px;
+  outline: none;
+  background: transparent;
+  color: #37352f;
+}
+.notion-link-input:focus {
+  border-color: #2383e2;
+  box-shadow: 0 0 0 2px rgba(35,131,226,0.15);
+}
+html.dark .notion-link-input { color: rgba(255,255,255,0.82); border-color: rgba(255,255,255,0.15); }
+.notion-link-btn {
+  padding: 5px 12px;
+  border: none;
+  border-radius: 6px;
+  background: #2383e2;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.1s;
+  white-space: nowrap;
+}
+.notion-link-btn:hover { background: #1c6cc0; }
+
 
 /* ═══════════════════════════════════════════════════════════════════════════
    ─── AI Skills Menu ────────────────────────────────────────────────────────
