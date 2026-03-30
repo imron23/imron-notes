@@ -262,6 +262,39 @@ html.dark ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); }
   line-height: 1.7 !important;
   font-family: inherit !important;
 }
+
+/* ─── Link Styling (Notion-style blue links) ─── */
+.notion-blocknote a {
+  color: #2383e2 !important;
+  text-decoration: underline !important;
+  text-decoration-color: rgba(35, 131, 226, 0.3) !important;
+  text-decoration-thickness: 1px !important;
+  text-underline-offset: 3px !important;
+  transition: all 0.15s ease !important;
+  cursor: pointer !important;
+  padding: 0 2px !important;
+  margin: 0 -2px !important;
+}
+
+.notion-blocknote a:hover {
+  color: #1c6cc0 !important;
+  text-decoration-color: #1c6cc0 !important;
+  text-decoration-thickness: 1.5px !important;
+  background-color: rgba(35, 131, 226, 0.08) !important;
+  border-radius: 3px !important;
+}
+
+html.dark .notion-blocknote a {
+  color: #4496e8 !important;
+  text-decoration-color: rgba(68, 150, 232, 0.3) !important;
+}
+
+html.dark .notion-blocknote a:hover {
+  color: #6cd1ff !important;
+  text-decoration-color: #6cd1ff !important;
+  background-color: rgba(68, 150, 232, 0.15) !important;
+}
+
 /* Force all editor text elements to inherit the wrapper font */
 .notion-blocknote,
 .notion-blocknote *,
