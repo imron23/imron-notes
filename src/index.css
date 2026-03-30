@@ -552,3 +552,301 @@ html.dark .notion-blocknote .bn-editor pre {
     font-size: 24px !important;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   ─── Notion-Style Floating Formatting Toolbar ──────────────────────────────
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.notion-toolbar {
+  display: inline-flex;
+  flex-direction: column;
+  background: #ffffff;
+  border: 1px solid rgba(55, 53, 47, 0.09);
+  border-radius: 10px;
+  box-shadow:
+    0 4px 8px rgba(15,15,15,0.08),
+    0 1px 3px rgba(15,15,15,0.06),
+    0 0 0 1px rgba(15,15,15,0.04);
+  padding: 4px 6px;
+  user-select: none;
+  white-space: nowrap;
+  backdrop-filter: blur(12px);
+  animation: tbFadeIn 0.12s ease both;
+  z-index: 100;
+}
+
+html.dark .notion-toolbar {
+  background: #2f2f2f;
+  border-color: rgba(255,255,255,0.1);
+  box-shadow:
+    0 6px 16px rgba(0,0,0,0.35),
+    0 1px 4px rgba(0,0,0,0.2);
+}
+
+@keyframes tbFadeIn {
+  from { opacity: 0; transform: translateY(4px) scale(0.98); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.notion-tb-row {
+  display: flex;
+  align-items: center;
+  gap: 1px;
+}
+
+/* ─── Individual button ─── */
+.notion-tb-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px 6px;
+  border: none;
+  border-radius: 5px;
+  background: transparent;
+  cursor: pointer;
+  color: rgba(55, 53, 47, 0.65);
+  font-size: 13px;
+  transition: background 0.08s ease, color 0.08s ease;
+  flex-shrink: 0;
+  min-width: 28px;
+  height: 28px;
+}
+.notion-tb-btn:hover {
+  background: rgba(55, 53, 47, 0.08);
+  color: #37352f;
+}
+.notion-tb-btn--active {
+  background: rgba(35, 131, 226, 0.12) !important;
+  color: #2383e2 !important;
+}
+html.dark .notion-tb-btn {
+  color: rgba(255,255,255,0.5);
+}
+html.dark .notion-tb-btn:hover {
+  background: rgba(255,255,255,0.08);
+  color: rgba(255,255,255,0.85);
+}
+html.dark .notion-tb-btn--active {
+  background: rgba(35, 131, 226, 0.2) !important;
+  color: #4496e8 !important;
+}
+
+/* ─── Separator ─── */
+.notion-tb-sep {
+  width: 1px;
+  height: 18px;
+  background: rgba(55, 53, 47, 0.12);
+  margin: 0 3px;
+  flex-shrink: 0;
+  border-radius: 99px;
+}
+html.dark .notion-tb-sep {
+  background: rgba(255,255,255,0.12);
+}
+
+/* ─── Color icon ─── */
+.notion-tb-color-wrap {
+  position: relative;
+  display: flex;
+}
+.notion-tb-color-icon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+}
+.notion-tb-color-bar {
+  width: 14px;
+  height: 3px;
+  border-radius: 99px;
+  display: block;
+  margin-top: 1px;
+}
+
+/* ─── AI button ─── */
+.notion-tb-ai-btn {
+  padding: 4px 8px !important;
+  gap: 0;
+  min-width: unset;
+  background: linear-gradient(135deg, rgba(99,102,241,0.08), rgba(139,92,246,0.08)) !important;
+  color: #6366f1 !important;
+  border-radius: 6px !important;
+}
+.notion-tb-ai-btn:hover {
+  background: linear-gradient(135deg, rgba(99,102,241,0.16), rgba(139,92,246,0.16)) !important;
+  color: #4f46e5 !important;
+}
+html.dark .notion-tb-ai-btn {
+  background: rgba(99,102,241,0.15) !important;
+  color: #818cf8 !important;
+}
+html.dark .notion-tb-ai-btn:hover {
+  background: rgba(99,102,241,0.25) !important;
+}
+
+.notion-tb-skills-wrap {
+  position: relative;
+  display: flex;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   ─── Color Picker Popover ──────────────────────────────────────────────────
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.notion-color-picker {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  z-index: 200;
+  background: #ffffff;
+  border: 1px solid rgba(55,53,47,0.09);
+  border-radius: 10px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.06);
+  padding: 10px;
+  animation: tbFadeIn 0.1s ease both;
+  width: 192px;
+}
+html.dark .notion-color-picker {
+  background: #2f2f2f;
+  border-color: rgba(255,255,255,0.1);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+}
+
+.notion-cp-section { padding: 0; }
+.notion-cp-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: rgba(55,53,47,0.5);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin: 0 0 6px;
+}
+html.dark .notion-cp-label { color: rgba(255,255,255,0.4); }
+
+.notion-cp-grid {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  gap: 4px;
+}
+.notion-cp-dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+  border: none;
+  outline: none;
+}
+.notion-cp-dot:hover { transform: scale(1.2); }
+.notion-cp-dot--active {
+  box-shadow: 0 0 0 2px #fff, 0 0 0 3.5px #2383e2 !important;
+  transform: scale(1.1);
+}
+html.dark .notion-cp-dot--active {
+  box-shadow: 0 0 0 2px #2f2f2f, 0 0 0 3.5px #4496e8 !important;
+}
+
+.notion-cp-divider {
+  height: 1px;
+  background: rgba(55,53,47,0.09);
+  margin: 8px 0;
+}
+html.dark .notion-cp-divider { background: rgba(255,255,255,0.1); }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   ─── AI Skills Menu ────────────────────────────────────────────────────────
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.notion-skills-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  z-index: 200;
+  background: #ffffff;
+  border: 1px solid rgba(55,53,47,0.09);
+  border-radius: 10px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+  padding: 6px;
+  min-width: 180px;
+  animation: tbFadeIn 0.1s ease both;
+}
+html.dark .notion-skills-menu {
+  background: #2f2f2f;
+  border-color: rgba(255,255,255,0.1);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+}
+
+.notion-skills-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: rgba(55,53,47,0.45);
+  padding: 4px 8px 6px;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+html.dark .notion-skills-label { color: rgba(255,255,255,0.35); }
+
+.notion-skills-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 6px 8px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: #37352f;
+  font-size: 13px;
+  font-weight: 450;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.08s;
+}
+.notion-skills-item:hover { background: rgba(55,53,47,0.06); }
+html.dark .notion-skills-item { color: rgba(255,255,255,0.82); }
+html.dark .notion-skills-item:hover { background: rgba(255,255,255,0.08); }
+
+.notion-skills-icon { font-size: 14px; flex-shrink: 0; }
+
+.notion-skills-divider {
+  height: 1px;
+  background: rgba(55,53,47,0.09);
+  margin: 5px 0;
+}
+html.dark .notion-skills-divider { background: rgba(255,255,255,0.1); }
+
+.notion-skills-edit-ai {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  padding: 6px 8px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: #6366f1;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.08s;
+}
+.notion-skills-edit-ai:hover { background: rgba(99,102,241,0.08); }
+html.dark .notion-skills-edit-ai { color: #818cf8; }
+
+.notion-skills-kbd {
+  margin-left: auto;
+  font-size: 10px;
+  font-family: monospace;
+  color: rgba(55,53,47,0.4);
+  background: rgba(55,53,47,0.06);
+  border-radius: 4px;
+  padding: 1px 4px;
+}
+html.dark .notion-skills-kbd {
+  color: rgba(255,255,255,0.35);
+  background: rgba(255,255,255,0.06);
+}

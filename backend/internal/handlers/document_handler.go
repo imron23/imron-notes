@@ -166,10 +166,17 @@ func (h *DocumentHandler) ImportFromURL(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 
-	var contentInterface interface{} = blocks
+
+
+	blocksBytes, err := json.Marshal(blocks)
+	if err != nil {
+		http.Error(w, "Failed to encode import content: "+err.Error(), http.StatusInternalServerError)
+		return
+	}
+	rawMsg := json.RawMessage(blocksBytes)
 
 	updatePayload := models.DocUpdatePayload{
-		Content: &contentInterface,
+		Content: &rawMsg,
 	}
 
 	if err := h.repo.Update(ctx, doc.ID, updatePayload); err != nil {
@@ -177,7 +184,7 @@ func (h *DocumentHandler) ImportFromURL(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 
-	doc.Content = contentInterface
+	doc.Content = rawMsg
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(doc)

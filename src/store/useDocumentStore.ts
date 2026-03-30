@@ -88,6 +88,8 @@ const addTreeItem = (
   });
 };
 
+const debounceTimers: Record<string, ReturnType<typeof setTimeout>> = {};
+
 // Ensure stable offline UX while allowing backend sync
 export const useDocumentStore = create<DocumentStore>()(
   persist((set, get) => ({
@@ -309,8 +311,10 @@ export const useDocumentStore = create<DocumentStore>()(
       }
     }));
     
-    // We only send content update
-    api.patch(`/documents/${id}`, { content }).catch(console.error);
+    if (debounceTimers[id]) clearTimeout(debounceTimers[id]);
+    debounceTimers[id] = setTimeout(() => {
+      api.patch(`/documents/${id}`, { content }).catch(console.error);
+    }, 1000);
   },
 
   addHistorySnapshot: (id, content) => {

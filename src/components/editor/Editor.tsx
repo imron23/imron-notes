@@ -8,6 +8,7 @@ import { useUIStore } from '../../store/useUIStore';
 import { PageLinkBlock } from "./blocks/PageLinkBlock";
 import { MonacoBlock } from "./blocks/MonacoBlock";
 import { FileText, Code2 } from "lucide-react";
+import { NotionToolbarController } from "./NotionToolbar";
 
 const schema = BlockNoteSchema.create({
   blockSpecs: {
@@ -159,7 +160,9 @@ function EditorInstance({ activeDocumentId }: { activeDocumentId: string }) {
         theme={isDarkMode ? "dark" : "light"}
         className="notion-blocknote" 
         slashMenu={false}
+        formattingToolbar={false}
       >
+        <NotionToolbarController />
         <SuggestionMenuController
           triggerCharacter={"/"}
           getItems={async (query) => {
