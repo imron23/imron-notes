@@ -14,7 +14,6 @@ import {
   Wand2,
   ChevronRight,
   Settings2,
-  ALargeSmall,
   Superscript,
   AlignLeft,
 } from "lucide-react";
@@ -253,7 +252,7 @@ function NotionFormattingToolbar() {
             onClick={() => { setShowColorPicker(v => !v); setShowSkills(false); }}
           >
             <span className="notion-tb-color-icon">
-              <ALargeSmall size={15} />
+              <span style={{ fontSize: 15, fontWeight: "bold", fontFamily: "serif", lineHeight: 1 }}>A</span>
               <span className="notion-tb-color-bar" style={{ background: currentColorHex }} />
             </span>
           </TBtn>
@@ -270,26 +269,26 @@ function NotionFormattingToolbar() {
 
         <ToolSep />
 
-        <TBtn icon={<Bold size={15} />}          label="Bold (⌘B)"        active={activeFormats.bold}      onClick={() => toggle("bold")} />
-        <TBtn icon={<Italic size={15} />}        label="Italic (⌘I)"      active={activeFormats.italic}    onClick={() => toggle("italic")} />
-        <TBtn icon={<Underline size={15} />}     label="Underline (⌘U)"   active={activeFormats.underline} onClick={() => toggle("underline")} />
+        <TBtn icon={<Bold size={16} />}          label="Bold (⌘B)"        active={activeFormats.bold}      onClick={() => toggle("bold")} />
+        <TBtn icon={<Italic size={16} />}        label="Italic (⌘I)"      active={activeFormats.italic}    onClick={() => toggle("italic")} />
+        <TBtn icon={<Underline size={16} />}     label="Underline (⌘U)"   active={activeFormats.underline} onClick={() => toggle("underline")} />
 
         <ToolSep />
 
-        <TBtn icon={<Link size={14} />}           label="Link (⌘K)"       onClick={handleLink} />
-        <TBtn icon={<Strikethrough size={14} />}  label="Strikethrough"   active={activeFormats.strike}    onClick={() => toggle("strike")} />
-        <TBtn icon={<Code size={14} />}           label="Inline code"     active={activeFormats.code}      onClick={() => toggle("code")} />
-        <TBtn icon={<Superscript size={13} />}    label="Math / LaTeX" />
+        <TBtn icon={<Link size={16} />}           label="Link (⌘K)"       onClick={handleLink} />
+        <TBtn icon={<Strikethrough size={16} />}  label="Strikethrough"   active={activeFormats.strike}    onClick={() => toggle("strike")} />
+        <TBtn icon={<Code size={16} />}           label="Inline code"     active={activeFormats.code}      onClick={() => toggle("code")} />
+        <TBtn icon={<Superscript size={16} />}    label="Math / LaTeX" />
 
         <ToolSep />
 
-        <TBtn icon={<MoreHorizontal size={15} />} label="More options" />
+        <TBtn icon={<MoreHorizontal size={16} />} label="More options" />
 
         <ToolSep />
 
-        <TBtn icon={<MessageSquare size={14} />}  label="Comment" />
-        <TBtn icon={<Smile size={14} />}          label="Add emoji reaction" />
-        <TBtn icon={<AlignLeft size={14} />}      label="Turn into" />
+        <TBtn icon={<MessageSquare size={16} />}  label="Comment" />
+        <TBtn icon={<Smile size={16} />}          label="Add emoji reaction" />
+        <TBtn icon={<AlignLeft size={16} />}      label="Turn into" />
 
         <ToolSep />
 
